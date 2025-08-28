@@ -1,0 +1,89 @@
+import fitz  # PyMuPDF
+import os
+import re
+from django.conf import settings
+from .models import Question, Course
+from django.core.files import File
+
+def get_course_image_directory(course):
+    """
+    Get the course-specific directory for question images.
+    Sanitizes course name by replacing spaces and special characters with underscores.
+    """
+    if course:
+        # Sanitize course name: replace spaces and special chars with underscores
+        course_name = re.sub(r'[^a-zA-Z0-9_]', '_', course.course_name)
+        # Remove multiple consecutive underscores
+        course_name = re.sub(r'_+', '_', course_name)
+        # Remove leading/trailing underscores
+        course_name = course_name.strip('_')
+        
+        # Ensure course name is not empty after sanitization
+        if not course_name:
+            course_name = 'unknown_course'
+            
+        return os.path.join('question_images', course_name)
+    else:
+        # Fallback for questions without course (shouldn't happen in normal usage)
+        return os.path.join('question_images', 'unknown_course')
+
+def parse_pdf_questions(pdf_path, course, marks_per_question=1):
+    doc = fitz.open(pdf_path)
+    questions = []
+    errors = []
+    media_root = settings.MEDIA_ROOT
+    
+    # Use course-specific directory
+    save_dir = os.path.join(media_root, get_course_image_directory(course))
+    os.makedirs(save_dir, exist_ok=True)
+
+    for page_num in range(len(doc)):
+        page = doc[page_num]
+        # Detect rectangular blocks that likely represent question + options
+        # Use block-level processing (type=0 for text, type=1 for image)
+        blocks = page.get_text("blocks")
+
+        # Optional: sort blocks top-down, left-right
+        blocks.sort(key=lambda b: (b[1], b[0]))  # b = (x0, y0, x1, y1, "text", block_no, block_type)
+
+        question_counter = 0
+
+        for block in blocks:
+            x0, y0, x1, y1, text, block_no, block_type = block
+
+            # We assume each "visible text block" corresponds to a full Q+A block
+            if block_type != 0:
+                continue
+
+            # Optional: basic filter to skip headers/footers or empty blocks
+            if len(text.strip()) < 10:
+                continue
+
+            # Crop the block region as image
+            rect = fitz.Rect(x0, y0, x1, y1 + 100)  # extend height slightly to include all options
+            pix = page.get_pixmap(clip=rect, dpi=200)
+            image_filename = f"q_page{page_num+1}_{question_counter+1}.png"
+            image_path = os.path.join(save_dir, image_filename)
+            pix.save(image_path)
+
+            try:
+                # Save in Question model — only image & blank option fields
+                question = Question(
+                    course=course,
+                    marks=marks_per_question,
+                    question='(image-based)',
+                    option_a='Option A',
+                    option_b='Option B',
+                    option_c='Option C',
+                    option_d='Option D',
+                    correct_answer='A',  # Set default, will be updated later via answer upload
+                )
+                with open(image_path, 'rb') as img_f:
+                    question.image.save(image_filename, File(img_f), save=False)
+                question.save()
+                questions.append(question)
+                question_counter += 1
+            except Exception as e:
+                errors.append(f"Error saving question {question_counter + 1} on page {page_num + 1}: {str(e)}")
+    
+    return questions, errors
