@@ -1,0 +1,123 @@
+{% extends 'exam/adminbase.html' %}
+{% load widget_tweaks %}
+{% block content %}
+<head>
+  <style>
+    .form-header {
+      font-size: 2rem;
+      font-weight: 600;
+      color: #0288d1;
+      margin: 2rem 0 1.5rem 0;
+      text-align: center;
+    }
+    .form-container {
+      background: #fff;
+      border-radius: 1rem;
+      box-shadow: 0 2px 16px #0001;
+      padding: 2rem 2.5rem;
+      max-width: 700px;
+      margin: 2rem auto;
+      border: none;
+    }
+    .form-group label {
+      font-weight: 500;
+      color: #01579b;
+    }
+    .btn-success, .btn-primary {
+      border-radius: 0.5rem;
+      font-size: 1.1rem;
+      padding: 0.6rem 2rem;
+      border: none;
+    }
+    .btn-success { background: #43a047; }
+    .btn-success:hover { background: #1b5e20; }
+    .btn-primary { background: #0288d1; }
+    .btn-primary:hover { background: #01579b; }
+    @media (max-width: 700px) {
+      .form-container { padding: 1rem 0.5rem; }
+    }
+  </style>
+</head>
+<div class="form-header">Add Question</div>
+<div class="form-container">
+  {% if questionForm.non_field_errors %}
+    <div class="alert alert-danger">{{ questionForm.non_field_errors }}</div>
+  {% endif %}
+  <form method="POST" enctype="multipart/form-data" autocomplete="off">
+    {% csrf_token %}
+    <div class="form-group mb-3">
+      <label for="question">Test</label>
+      {% render_field questionForm.courseID|attr:'required:true' class="form-control form-control-sm rounded-0"  %}
+      {% if questionForm.courseID.errors %}
+        <div class="text-danger small">{{ questionForm.courseID.errors }}</div>
+      {% endif %}
+    </div>
+    <div class="form-group mb-3">
+      <label for="question">Question</label>
+      {% render_field questionForm.question|attr:'required:true' class="form-control form-control-sm rounded-0" placeholder="Example: Which one of the following is not a phase of Prototyping Model?" %}
+      {% if questionForm.question.errors %}
+        <div class="text-danger small">{{ questionForm.question.errors }}</div>
+      {% endif %}
+    </div>
+    <div class="form-group mb-3">
+      <label for="subject">Subject</label>
+      {% render_field questionForm.subject class="form-control form-control-sm rounded-0" %}
+      {% if questionForm.subject.errors %}
+        <div class="text-danger small">{{ questionForm.subject.errors }}</div>
+      {% endif %}
+    </div>
+    <div class="form-group mb-3">
+      <label for="option_a">Option A</label>
+      {% render_field questionForm.option_a class="form-control form-control-sm rounded-0" placeholder="Option A" %}
+      {% if questionForm.option_a.errors %}
+        <div class="text-danger small">{{ questionForm.option_a.errors }}</div>
+      {% endif %}
+    </div>
+    <div class="form-group mb-3">
+      <label for="option_b">Option B</label>
+      {% render_field questionForm.option_b class="form-control form-control-sm rounded-0" placeholder="Option B" %}
+      {% if questionForm.option_b.errors %}
+        <div class="text-danger small">{{ questionForm.option_b.errors }}</div>
+      {% endif %}
+    </div>
+    <div class="form-group mb-3">
+      <label for="option_c">Option C</label>
+      {% render_field questionForm.option_c class="form-control form-control-sm rounded-0" placeholder="Option C" %}
+      {% if questionForm.option_c.errors %}
+        <div class="text-danger small">{{ questionForm.option_c.errors }}</div>
+      {% endif %}
+    </div>
+    <div class="form-group mb-3">
+      <label for="option_d">Option D</label>
+      {% render_field questionForm.option_d class="form-control form-control-sm rounded-0" placeholder="Option D" %}
+      {% if questionForm.option_d.errors %}
+        <div class="text-danger small">{{ questionForm.option_d.errors }}</div>
+      {% endif %}
+    </div>
+    <div class="form-group mb-3">
+      <label for="image">Question Image (optional)</label>
+      {% render_field questionForm.image class="form-control-file" %}
+      {% if questionForm.image.errors %}
+        <div class="text-danger small">{{ questionForm.image.errors }}</div>
+      {% endif %}
+    </div>
+    <div class="form-group mb-3">
+      <label for="question_number">Marks</label>
+      {% render_field questionForm.marks|attr:'required:true' class="form-control form-control-sm rounded-0" placeholder="Example: 5" %}
+      {% if questionForm.marks.errors %}
+        <div class="text-danger small">{{ questionForm.marks.errors }}</div>
+      {% endif %}
+    </div>
+    <div class="form-group mb-3">
+      <label for="correct_answer">Correct Answer</label>
+      {% render_field questionForm.correct_answer|attr:'required:true' class="form-control form-control-sm rounded-0" %}
+      {% if questionForm.correct_answer.errors %}
+        <div class="text-danger small">{{ questionForm.correct_answer.errors }}</div>
+      {% endif %}
+    </div>
+    <button type="submit" class="btn btn-success">Submit Question</button>
+    <button type="submit" name="save_next" class="btn btn-primary" style="margin-left:10px;">Save and Next</button>
+  </form>
+</div>
+<br><br><br>
+{% endblock content %}
