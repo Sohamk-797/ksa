@@ -1,0 +1,10 @@
+{% extends 'student/studentbase.html' %}
+{% block content %}
+<div class="container" style="margin-top: 100px;">
+  <div class="alert alert-warning text-center" style="font-size: 1.5em; padding: 40px; background: #fff8e1; color: #8d6e63; border-radius: 1rem; box-shadow: 0 2px 16px #0001;">
+    <h2>Exam Time Over</h2>
+    <p>The exam window for <strong>{{ course.course_name }}</strong> has ended.</p>
+    <a href="/student/student-dashboard" class="btn btn-primary btn-lg mt-4" style="border-radius: 0.5rem; background: #0288d1; border: none;">Go to Dashboard</a>
+  </div>
+</div>
+{% endblock %}
