@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en" dir="ltr">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Online Examination System</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
+<style>
+  body {
+    font-family: 'Segoe UI', 'Arial', sans-serif;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .main-content {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem 1rem;
+    min-height: calc(100vh - 200px);
+    margin-top: 80px; /* Account for fixed navbar */
+  }
+  
+  .hero-section {
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(10px);
+    border-radius: 20px;
+    box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+    padding: 3rem 2.5rem;
+    max-width: 800px;
+    width: 100%;
+    border: 1px solid rgba(255,255,255,0.2);
+    text-align: center;
+    margin: 0 auto;
+  }
+  
+  .hero-icon {
+    font-size: 4rem;
+    color: #667eea;
+    margin-bottom: 1.5rem;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  
+  .hero-title {
+    font-size: 3rem;
+    font-weight: 700;
+    color: #2c3e50;
+    margin-bottom: 1rem;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  
+  .hero-subtitle {
+    font-size: 1.5rem;
+    color: #6c757d;
+    margin-bottom: 1.5rem;
+    font-weight: 500;
+  }
+  
+  .hero-description {
+    font-size: 1.2rem;
+    color: #6c757d;
+    margin-bottom: 2.5rem;
+    line-height: 1.6;
+  }
+  
+  .cta-section {
+    margin-bottom: 2.5rem;
+  }
+  
+  .cta-text {
+    font-size: 1.1rem;
+    color: #2c3e50;
+    font-weight: 600;
+    margin-bottom: 1.5rem;
+  }
+  
+  .btn-hero {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    border: none;
+    border-radius: 12px;
+    font-size: 1.2rem;
+    font-weight: 600;
+    padding: 1rem 2.5rem;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.75rem;
+  }
+  
+  .btn-hero:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
+    background: linear-gradient(135deg, #5a6fd8 0%, #6a4190 100%);
+    color: white;
+  }
+  
+  .features-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1.5rem;
+    margin-top: 2rem;
+  }
+  
+  .feature-card {
+    background: rgba(102, 126, 234, 0.05);
+    border-radius: 15px;
+    padding: 1.5rem;
+    border: 1px solid rgba(102, 126, 234, 0.1);
+    transition: all 0.3s ease;
+  }
+  
+  .feature-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 25px rgba(102, 126, 234, 0.15);
+  }
+  
+  .feature-icon {
+    font-size: 2rem;
+    color: #667eea;
+    margin-bottom: 1rem;
+  }
+  
+  .feature-title {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: #2c3e50;
+    margin-bottom: 0.5rem;
+  }
+  
+  .feature-description {
+    font-size: 0.9rem;
+    color: #6c757d;
+    line-height: 1.5;
+  }
+  
+  @media (max-width: 768px) {
+    .hero-section {
+      padding: 2rem 1.5rem;
+      margin: 1rem;
+    }
+    
+    .hero-title {
+      font-size: 2.2rem;
+    }
+    
+    .hero-subtitle {
+      font-size: 1.2rem;
+    }
+    
+    .features-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>
+
+</head>
+
+<body>
+  {% include "exam/navbar.html" %}
+  
+  <div class="main-content">
+    <div class="container">
+      <div class="row justify-content-center">
+        <div class="col-lg-10">
+          <div class="hero-section">
+            <div class="hero-icon">
+              <i class="fas fa-laptop-code"></i>
+            </div>
+            <div class="mb-3">
+              <img src="{% static 'image/logoimage.png' %}" alt="Logo" style="max-height:80px; width:auto;" />
+            </div>
+            <h1 class="hero-title">Online Examination System</h1>
+            <p class="hero-subtitle">Attend your examinations online!</p>
+            <p class="hero-description">
+              Experience a modern, secure, and efficient way to conduct and take examinations. 
+              Our platform provides real-time monitoring, instant results, and comprehensive analytics 
+              for both students and administrators.
+            </p>
+            
+            <div class="cta-section">
+              <p class="cta-text">Start Your Journey Here:</p>
+              <div class="d-flex flex-wrap justify-content-center gap-3">
+                <a href="/student/studentsignup" class="btn btn-hero">
+                  <i class="fas fa-graduation-cap"></i>
+                  Sign Up as Student
+                </a>
+                <a href="/student/studentlogin" class="btn btn-hero">
+                  <i class="fas fa-right-to-bracket"></i>
+                  Login
+                </a>
+              </div>
+            </div>
+            
+            <div class="features-grid">
+              <div class="feature-card">
+                <div class="feature-icon">
+                  <i class="fas fa-clock"></i>
+                </div>
+                <div class="feature-title">Timed Examinations</div>
+                <div class="feature-description">
+                  Set custom time limits and track progress in real-time with our advanced timer system.
+                </div>
+              </div>
+              
+              <div class="feature-card">
+                <div class="feature-icon">
+                  <i class="fas fa-shield-alt"></i>
+                </div>
+                <div class="feature-title">Secure Environment</div>
+                <div class="feature-description">
+                  Advanced security features including proctoring, anti-cheating measures, and secure authentication.
+                </div>
+              </div>
+              
+              <div class="feature-card">
+                <div class="feature-icon">
+                  <i class="fas fa-chart-line"></i>
+                </div>
+                <div class="feature-title">Instant Analytics</div>
+                <div class="feature-description">
+                  Get detailed performance reports, analytics, and insights immediately after exam completion.
+                </div>
+              </div>
+              
+              <div class="feature-card">
+                <div class="feature-icon">
+                  <i class="fas fa-mobile-alt"></i>
+                </div>
+                <div class="feature-title">Responsive Design</div>
+                <div class="feature-description">
+                  Access your exams from any device - desktop, tablet, or mobile with our responsive interface.
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  {% include "exam/footer.html" %}
+  
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+
+</html>
