@@ -167,6 +167,22 @@ def start_exam_view(request, pk):
         q_ids = {str(q.id) for q in questions}
         subj_answered = len([1 for k in answers.keys() if k in q_ids])
 
+    # Require activation before allowing entry
+    if getattr(course, 'status', 'draft') != 'active' or not getattr(course, 'activated_at', None):
+        return HttpResponse("This test has not been activated yet. Please wait for the administrator to start it.", status=403)
+
+    # Compute global remaining time based on activation time
+    from django.utils import timezone
+    duration_seconds = int((getattr(course, 'duration_minutes', 60) or 60) * 60)
+    remaining_seconds = duration_seconds
+    elapsed = int((timezone.now() - course.activated_at).total_seconds())
+    remaining_seconds = max(0, duration_seconds - elapsed)
+    # If timer already over, block entry
+    if remaining_seconds <= 0:
+        return render(request, 'student/exam_time_over.html', {
+            'course': course
+        }, status=403)
+
     response = render(request, 'student/start_exam.html', {
         'course': course,
         'question': current_question,
@@ -174,6 +190,7 @@ def start_exam_view(request, pk):
         'current_q_index': q_index,
         'saved_answer': saved_answer,
         'duration_minutes': course.duration_minutes,
+        'remaining_seconds': remaining_seconds,
         'exam_mode': True,
         'subjects': non_general_subjects if subject_mode else [],
         'active_subject': active_subject,
