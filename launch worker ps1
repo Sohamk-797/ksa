@@ -1,0 +1,16 @@
+$Args = @(
+    $App,
+    '--host', $HostBind,
+    '--port', $Port,
+    '--workers', $Workers,
+    '--loop', 'asyncio',
+    '--http', 'h11',
+    '--backlog', '512',
+    '--timeout-keep-alive', '45',
+    '--limit-concurrency', '500',
+    '--limit-max-requests', '5000',
+    '--log-level', 'info'
+)
+
+
+pip install -U "uvicorn[standard]" h11
