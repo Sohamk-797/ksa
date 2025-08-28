@@ -428,8 +428,12 @@ def admin_add_question_view(request):
             course.save()
             if 'save_next' in request.POST:
                 return redirect('admin-add-question')
+            # Default: go to list of questions for this course
+            return redirect('view-question', pk=course.id)
         else:
-            print("form is invalid")
+            # Stay on the same page and display errors
+            return render(request,'exam/admin_add_question.html',{'questionForm':questionForm})
+        # Fallback
         return HttpResponseRedirect('/admin-view-question')
     return render(request,'exam/admin_add_question.html',{'questionForm':questionForm})
 
@@ -671,6 +675,9 @@ def activate_course_view(request, pk):
     if request.method == 'POST':
         course = models.Course.objects.get(id=pk)
         course.status = 'active'
+        # Set global activation timestamp so duration starts for everyone now
+        if not getattr(course, 'activated_at', None):
+            course.activated_at = timezone.now()
         # Update question_number and total_marks
         questions = models.Question.objects.filter(course=course)
         course.question_number = questions.count()
